@@ -1,12 +1,13 @@
-FROM alpine:3.22
+FROM ubuntu:22.04
 
-RUN apk update && apk upgrade
-RUN apk add git bash
-RUN apk add python3 py3-pip py3-flask
+RUN apt update && apt upgrade
+RUN apt install -y git bash
+RUN apt install -y python3 py3-pip
 
 RUN mkdir /server
 RUN git clone https://github.com/Jair-F/wakeonlan_gui.git /server
 
 WORKDIR /server
+RUN pip3 install -r requirements.txt
 EXPOSE 80
-ENTRYPOINT [ "/server/deploy_run.sh" ]
+CMD [ "/server/deploy_run.sh" ]
