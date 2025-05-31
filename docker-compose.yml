@@ -2,5 +2,6 @@ services:
 
   deploy:
     build: ./docker/production/
-    ports:
-      - "80:80"
+    network_mode: host
+    # ports:
+    #   - 5001:5001
