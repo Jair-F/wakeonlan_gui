@@ -3,5 +3,3 @@ services:
   deploy:
     build: ./docker/production/
     network_mode: host
-    # ports:
-    #   - 5001:5001
