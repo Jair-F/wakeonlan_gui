@@ -3,3 +3,4 @@ services:
   deploy:
     build: ./docker/production/
     network_mode: host
+    restart: unless-stopped
