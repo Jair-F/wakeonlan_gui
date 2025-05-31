@@ -10,4 +10,4 @@ RUN git clone https://github.com/Jair-F/wakeonlan_gui.git /server
 WORKDIR /server
 RUN pip3 install -r requirements.txt
 EXPOSE 5001
-CMD [ "/server/deploy_run.sh" ]
+ENTRYPOINT [ "/server/deploy_run.sh" ]
