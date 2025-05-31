@@ -1,0 +1,6 @@
+services:
+
+  deploy:
+    build: ./docker/production/
+    ports:
+      - "80:80"

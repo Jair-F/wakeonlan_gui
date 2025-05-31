@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wake-on-LAN</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <!--- <link rel="stylesheet" href="static/style.css" /> --->
+</head>
+
+<body>
+    <div class="container">
+        <h1>Wake-on-LAN Utility</h1>
+        <p>Click the button below to wake up your device.</p>
+        <button id="wakeButton">Wake Up Device</button>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        document.getElementById('wakeButton').addEventListener('click', () => {
+            fetch('/send_wol_packet')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('status').textContent = 'Wake packet sent!';
+                    } else {
+                        document.getElementById('status').textContent = 'Failed to send wake packet.';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('status').textContent = 'Error: ' + error.message;
+                });
+        });
+    </script>
+</body>
+
+</html>
