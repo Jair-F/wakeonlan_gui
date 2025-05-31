@@ -18,4 +18,4 @@ def send_wol():
     return F"sending WOL to {PC_MAC_ADDRESS}"
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', '5001')
+    app.run(host='0.0.0.0', port='5001')
