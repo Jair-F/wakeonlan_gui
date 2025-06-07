@@ -7,10 +7,11 @@
     <title>Wake-on-LAN</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
     <!--- <link rel="stylesheet" href="static/style.css" /> --->
-    <a href="/">home</a>
 </head>
 
 <body>
+    {% include 'header.html' %}
+
     <form action="/add_pc" method="POST">
         <h1>Add PC to list</h1>
         <label for="PC_NAME">PC Name:</label>

@@ -7,23 +7,22 @@
     <title>Wake-on-LAN</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
     <!--- <link rel="stylesheet" href="static/style.css" /> --->
-    <a href="/add_pc">Add PC</a>
-    <a href="/delete_pc">Delte PC</a>
 </head>
 
 <body>
+    {% include 'header.html' %}
+
+    <include src="{{ url_for('static', filename='header.html') }}"></include>
     <form action="/send_wol_packet" method="POST">
         <h1>Wake-on-LAN Utility</h1>
-        <label for="pc">Click the button below to wake up your device.</label>
-        <select name="MAC_ADDR" id="pc">
+        <select name="MAC_ADDR" id="pc_select">
             {% for key, value in pc_list.items() %}
             <option value="{{ value }}">{{ key }}</option>
             {% endfor %}
         </select>
-        <input type="submit" value="submit">Wake Up Device</input>
-        <p id="status"></p>
+        <br>
+        <input type="submit" value="Wake Up" />
     </form>
-
 </body>
 
 </html>
