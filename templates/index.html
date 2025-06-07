@@ -15,7 +15,7 @@
         <h1>Wake-on-LAN Utility</h1>
         <label for="pc">Click the button below to wake up your device.</label>
         <select name="MAC_ADDR" id="pc">
-            {% for key, value in pc_list %}
+            {% for key, value in pc_list.items() %}
             <option value="{{ value }}">{{ key }}</option>
             {% endfor %}
         </select>
