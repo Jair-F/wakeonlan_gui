@@ -1,8 +1,8 @@
 services:
-  deploy:
+  wakeonlan_gui_deploy:
     image: jairf/wakeonlan_gui:latest
     container_name: wakeonlan_gui
     network_mode: host
     restart: unless-stopped
     volumes:
-      - /media/server/wakeonlan_gui/:/server/config/
+      - /media/server/wakeonlan_gui:/server/config
