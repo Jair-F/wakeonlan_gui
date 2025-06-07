@@ -5,4 +5,4 @@ services:
     network_mode: host
     restart: unless-stopped
     volumes:
-      - /media/server/wakeonlan_gui/database.sqlite:/server/database.sqlite
+      - /media/server/wakeonlan_gui/:/server/config/

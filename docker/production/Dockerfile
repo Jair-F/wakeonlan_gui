@@ -1,4 +1,5 @@
 FROM alpine:3.22
+USER root
 
 RUN apk update && apk upgrade
 RUN apk add git bash
