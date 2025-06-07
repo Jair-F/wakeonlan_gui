@@ -4,5 +4,5 @@ services:
     container_name: wakeonlan_gui
     network_mode: host
     restart: unless-stopped
-  volumes:
-    - /media/server/wakeonlan_gui/database.sqlite:/server/database.sqlite
+    volumes:
+      - /media/server/wakeonlan_gui/database.sqlite:/server/database.sqlite
