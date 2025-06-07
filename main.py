@@ -27,6 +27,15 @@ def add_pc():
     return render_template('add_pc.html')
 
 
+@app.route('/delete_pc', methods=['GET', 'POST'])
+def delete_pc():
+    if request.method == 'POST':
+        mac_addr = request.form['MAC_ADDR']
+
+        persistant.delete_pc_mac_addresses(mac_addr)
+    return render_template('delete_pc.html', pc_list=persistant.get_pc_mac_addresses())
+
+
 @app.route('/send_wol_packet', methods=['GET', 'POST'])
 def send():
     if request.method == 'POST':

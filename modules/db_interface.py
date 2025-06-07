@@ -41,5 +41,15 @@ class Persistant:
             print(F"saved {pc_name} - {mac_addr} to db")
             return True
     
-    def delete_pc_mac_addresses(self, pc_name, mac_address):
-        pass
+    def delete_pc_mac_addresses(self, mac_addr):
+        with sqlite3.connect(self.database_path) as database:
+            try:
+                delete_query = F"DELETE FROM {self.DB_WAKEONLAN_TABLE} WHERE mac_addr = ?"
+                database.execute(delete_query, (mac_addr,))
+                database.commit()
+            except sqlite3.Error as error:
+                print("SQL-Error:", error)
+                return False
+
+            print(F"deleted {mac_addr} to db")
+            return True
