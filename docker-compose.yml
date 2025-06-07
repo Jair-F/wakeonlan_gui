@@ -1,5 +1,6 @@
 services:
   deploy:
     image: jairf/wakeonlan_gui:latest
+    container_name: wakeonlan_gui
     network_mode: host
     restart: unless-stopped
