@@ -2,8 +2,8 @@ from wakeonlan import send_magic_packet
 from flask import Flask, redirect, render_template, request, url_for
 from modules.db_interface import Persistant
 
-# SERVER_DIR_PATH = "/media/server/"
-SERVER_DIR_PATH = "./"
+SERVER_DIR_PATH = "/media/server/"
+# SERVER_DIR_PATH = "./"
 DATABASE_FILENAME = "database.sqlite"
 
 app = Flask(__name__)
