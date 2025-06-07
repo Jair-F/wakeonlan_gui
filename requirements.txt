@@ -1,2 +1,4 @@
 wakeonlan
 flask
+getmac
+scapy

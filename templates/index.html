@@ -7,31 +7,22 @@
     <title>Wake-on-LAN</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
     <!--- <link rel="stylesheet" href="static/style.css" /> --->
+    <a href="/add_pc">Add PC</a>
 </head>
 
 <body>
-    <div class="container">
+    <form action="/send_wol_packet" method="POST">
         <h1>Wake-on-LAN Utility</h1>
-        <p>Click the button below to wake up your device.</p>
-        <button id="wakeButton">Wake Up Device</button>
+        <label for="pc">Click the button below to wake up your device.</label>
+        <select name="MAC_ADDR" id="pc">
+            {% for key, value in pc_list %}
+            <option value="{{ value }}">{{ key }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="submit">Wake Up Device</input>
         <p id="status"></p>
-    </div>
+    </form>
 
-    <script>
-        document.getElementById('wakeButton').addEventListener('click', () => {
-            fetch('/send_wol_packet')
-                .then(response => {
-                    if (response.ok) {
-                        document.getElementById('status').textContent = 'Wake packet sent!';
-                    } else {
-                        document.getElementById('status').textContent = 'Failed to send wake packet.';
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('status').textContent = 'Error: ' + error.message;
-                });
-        });
-    </script>
 </body>
 
 </html>
