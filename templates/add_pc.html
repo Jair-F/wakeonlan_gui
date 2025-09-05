@@ -18,7 +18,12 @@
         <input type="text" name="PC_NAME" id="PC_NAME" />
         <br>
         <label for="MAC_ADDR">Mac Addr:</label>
-        <input type="text" name="MAC_ADDR" id="MAC_ADDR" />
+        <input type="text" name="MAC_ADDR" id="MAC_ADDR" list="MAC_ADDR_LIST" required/>
+        <datalist id="MAC_ADDR_LIST">
+            {% for item in mac_adresses %}
+            <option value="{{ item.mac }}">{{ item.ip }}</option>
+            {% endfor %}
+        </datalist>
         <br>
         <input type="submit" value="Add PC" />
         <p id="status"></p>
