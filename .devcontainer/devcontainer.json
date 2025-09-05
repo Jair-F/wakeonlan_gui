@@ -21,7 +21,7 @@
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
     // Uncomment the next line to run commands after the container is created.
-    "postCreateCommand": "pip3 install -r requirements.txt"
+    "postCreateCommand": "pip3 install -r requirements.txt ; sudo .devcontainer/createWorkDir.sh"
     // Configure tool-specific properties.
     // "customizations": {},
     // Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
