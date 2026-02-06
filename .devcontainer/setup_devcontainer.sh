@@ -1,6 +1,7 @@
 #!/bin/bash
 
 pip3 install -r requirements.txt
+sudo pip3 install -r requirements.txt # the network scan needs to be run as sudo - so install requirements for sudo
 pip3 install pre-commit
 
 sudo mkdir -p /server/config

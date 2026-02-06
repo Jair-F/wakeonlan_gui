@@ -16,13 +16,12 @@ from scapy.all import srp
 # print(f"Remote Host MAC: {mac_remote_host}")
 
 
-"""
-@return list with ip and mac
-@param subnet "192.168.0.0/24"
-"""
+def scan_network_ip_addresses(subnet: str) -> list[dict[str, str]]:
+    """
+    @return list with ip and mac
+    @param subnet "192.168.0.0/24"
+    """
 
-
-def scan_network_ip_addresses(subnet) -> list:
     arp_request = Ether(dst='ff:ff:ff:ff:ff:ff') / ARP(pdst=subnet)
     answered, unanswered = srp(arp_request, timeout=1, verbose=False)
 
@@ -33,9 +32,8 @@ def scan_network_ip_addresses(subnet) -> list:
 
 
 if __name__ == '__main__':
-    subnet = '192.168.0.0/24'  # Replace with your network range
     print('scanning network')
-    devices = scan_network_ip_addresses(subnet)
+    devices = scan_network_ip_addresses(subnet='192.168.0.0/24')
     print(F'found {len(devices)} devices')
     for device in devices:
         print(f"IP: {device['ip']}, MAC: {device['mac']}")

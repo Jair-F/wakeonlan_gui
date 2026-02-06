@@ -620,6 +620,9 @@ mixin-class-rgx=.*[Mm]ixin
 # List of decorators that change the signature of a decorated function.
 signature-mutators=
 
+# List of module names for which member attributes should not be checked
+ignored-modules=flask,scapy,wakeonlan
+
 
 [VARIABLES]
 

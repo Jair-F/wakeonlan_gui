@@ -1,7 +1,10 @@
+from typing import Any
+
 from flask import Flask
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import Response
 from flask import url_for
 from wakeonlan import send_magic_packet
 
@@ -18,12 +21,12 @@ persistant = Persistant(SERVER_DIR_PATH + DATABASE_FILENAME)
 
 
 @app.route('/')
-def index():
+def index() -> str | Any:
     return render_template('index.html', pc_list=persistant.get_pc_mac_addresses())
 
 
 @app.route('/add_pc', methods=['GET', 'POST'])
-def add_pc():
+def add_pc() -> str | Any:
     if request.method == 'POST':
         mac_addr = request.form['MAC_ADDR']
         pc_name = request.form['PC_NAME']
@@ -37,7 +40,7 @@ def add_pc():
 
 
 @app.route('/delete_pc', methods=['GET', 'POST'])
-def delete_pc():
+def delete_pc() -> str | Any:
     if request.method == 'POST':
         mac_addr = request.form['MAC_ADDR']
 
@@ -46,7 +49,7 @@ def delete_pc():
 
 
 @app.route('/send_wol_packet', methods=['GET', 'POST'])
-def send():
+def send() -> Response:
     if request.method == 'POST':
         mac_addr = request.form['MAC_ADDR']
 
