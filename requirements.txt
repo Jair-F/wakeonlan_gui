@@ -1,4 +1,4 @@
-wakeonlan
 flask
 getmac
 scapy
+wakeonlan
