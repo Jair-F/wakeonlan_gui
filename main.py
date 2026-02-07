@@ -12,7 +12,7 @@ from modules.db_interface import Persistant
 from modules.scan_network import scan_network_ip_addresses
 
 SERVER_DIR_PATH = '/server/config/'
-# SERVER_DIR_PATH = "./"
+# SERVER_DIR_PATH = './'
 DATABASE_FILENAME = 'database.sqlite'
 NETWORK_SUBNET = '192.168.0.0/24'
 
@@ -59,4 +59,12 @@ def send() -> Response:
 
 
 if __name__ == '__main__':
+    # persistant._set_db_version(0)
+    subnet = persistant.get_app_settings('network_subnet')
+    NETWORK_SUBNET = subnet if subnet else NETWORK_SUBNET
+
+    print(F"App Version: {persistant.get_app_settings('app_version')}")
+    print(F"Operating System: {persistant.get_app_settings('operating_system')}")
+    print(F'DB Version: {persistant.get_db_version()}')
+    print(F'Network Subnet: {NETWORK_SUBNET}')
     app.run(host='0.0.0.0', port='5001')

@@ -10,18 +10,14 @@ def is_mac_address_valid(mac_addr: str) -> re.Match[str] | None:
 class Persistant:
     def __init__(self, database_path: str):
         self._db_wakeonlan_table = 'WAKEONLAN'
+        self._db_application_settings_table = 'APP_SETTINGS'
         self.database_path = database_path
 
         clean_starup = not os.path.exists(self.database_path)
         if clean_starup:
             print('no database found - creating ', self.database_path)
 
-        with sqlite3.connect(self.database_path) as database:
-            database.execute(
-                F"""CREATE TABLE IF NOT EXISTS {self._db_wakeonlan_table}
-                (id INTEGER PRIMARY KEY AUTOINCREMENT, pc_name TEXT, mac_addr TEXT);""",
-            )
-            database.commit()
+        self._migrate_db_on_version_change()
 
     def get_pc_mac_addresses(self) -> dict[str, str]:
         with sqlite3.connect(self.database_path) as database:
@@ -61,3 +57,65 @@ class Persistant:
 
             print(F'deleted {mac_addr} to db')
             return True
+
+    def get_db_version(self) -> int | None:
+        with sqlite3.connect(self.database_path) as database:
+            version = database.execute('PRAGMA user_version').fetchone()
+            return version[0] if version else None
+
+    def _set_db_version(self, version: int) -> bool:
+        self._execute_single_command(F'PRAGMA user_version = {version}')
+        return True
+
+    def get_app_settings(self, setting_key: str) -> str | None:
+        with sqlite3.connect(self.database_path) as database:
+            row = database.execute(
+                F"""SELECT setting_value FROM {self._db_application_settings_table}
+                WHERE setting_key = '{setting_key}'""",
+            ).fetchone()
+            return row[0] if row else None
+
+    def set_app_settings(self, setting_key: str, setting_value: str) -> None:
+        self._execute_single_command(
+            F"""UPDATE {self._db_application_settings_table}
+            SET setting_value = '{setting_value}'
+            WHERE setting_key = '{setting_key}'""",
+        )
+
+    def _execute_single_command(self, sql: str) -> None:
+        with sqlite3.connect(self.database_path) as database:
+            database.execute(sql)
+            database.commit()
+
+    def _migrate_db_on_version_change(self) -> None:
+        if self.get_db_version() == 0:
+            print('migration DB from 0 to 1')
+            self._execute_single_command(
+                F"""CREATE TABLE IF NOT EXISTS {self._db_wakeonlan_table}
+                (id INTEGER PRIMARY KEY AUTOINCREMENT, pc_name TEXT, mac_addr TEXT);""",
+            )
+            self._execute_single_command(
+                F"""CREATE TABLE IF NOT EXISTS {self._db_application_settings_table} (
+                    setting_key TEXT PRIMARY KEY,
+                    setting_value TEXT
+                    );""",
+            )
+            self._set_db_version(1)
+        if self.get_db_version() == 1:
+            print('migration DB from 1 to 2')
+            self._execute_single_command(
+                F"""INSERT OR IGNORE INTO {self._db_application_settings_table}
+                (setting_key, setting_value) VALUES ('app_version', '0.0.1');""",
+            )
+            self._execute_single_command(
+                F"""INSERT OR IGNORE INTO {self._db_application_settings_table}
+                (setting_key, setting_value) VALUES ('operating_system', 'linux');""",
+            )
+            self._set_db_version(2)
+        if self.get_db_version() == 2:
+            print('migration DB from 2 to 3')
+            self._execute_single_command(
+                F"""INSERT OR IGNORE INTO {self._db_application_settings_table}
+                (setting_key, setting_value) VALUES ('network_subnet', '192.168.0.0/24');""",
+            )
+            self._set_db_version(3)
