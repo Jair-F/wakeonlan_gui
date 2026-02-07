@@ -76,8 +76,7 @@ def send() -> Response:
     return redirect(url_for('index'))
 
 
-if __name__ == '__main__':
-    # persistant._set_db_version(0)
+if __name__ in ('__main__', 'main'):
     subnet = persistant.get_app_settings('network_subnet')
     NETWORK_SUBNET = subnet if subnet else NETWORK_SUBNET
 
