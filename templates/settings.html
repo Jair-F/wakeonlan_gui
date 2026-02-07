@@ -13,7 +13,7 @@
     {% include 'header.html' %}
 
     <form action="/add_pc" method="POST">
-        <h1>Add PC to list</h1>
+        <h1>Add PC</h1>
         <label for="PC_NAME">PC Name:</label>
         <input type="text" name="PC_NAME" id="PC_NAME" />
         <br>
@@ -27,6 +27,23 @@
         <br>
         <input type="submit" value="Add PC" />
         <p id="status"></p>
+    </form>
+
+    <form action="/delete_pc" method="POST">
+        <h1>Delete PC</h1>
+        <select name="MAC_ADDR" id="pc">
+            {% for key, value in pc_list.items() %}
+            <option value="{{ value }}">{{ key }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Delete"></input>
+        <p id="status"></p>
+    </form>
+
+    <form action="/update_subnet" method="POST">
+        <h1>scan subnet</h1>
+        <input type="text" name="SUBNET" id="SUBNET" value="{{ subnet }}"/>
+        <input type="submit" value="change"></input>
     </form>
 
 </body>

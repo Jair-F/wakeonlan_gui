@@ -10,6 +10,7 @@ from wakeonlan import send_magic_packet
 
 from modules.db_interface import Persistant
 from modules.scan_network import scan_network_ip_addresses
+from modules.tools import is_valid_subnet
 
 SERVER_DIR_PATH = '/server/config/'
 # SERVER_DIR_PATH = './'
@@ -25,27 +26,44 @@ def index() -> str | Any:
     return render_template('index.html', pc_list=persistant.get_pc_mac_addresses())
 
 
-@app.route('/add_pc', methods=['GET', 'POST'])
+@app.route('/add_pc', methods=['POST'])
 def add_pc() -> str | Any:
-    if request.method == 'POST':
-        mac_addr = request.form['MAC_ADDR']
-        pc_name = request.form['PC_NAME']
+    mac_addr = request.form['MAC_ADDR']
+    pc_name = request.form['PC_NAME']
 
-        if not persistant.add_pc_mac_addr(pc_name, mac_addr):
-            return 'mac address or pc name not valid'
-
-    device_list = scan_network_ip_addresses(NETWORK_SUBNET)
-    print(F'device_list: {device_list}')
-    return render_template('add_pc.html', mac_adresses=device_list)
+    if not persistant.add_pc_mac_addr(pc_name, mac_addr):
+        return 'mac address or pc name not valid'
+    return redirect('/settings')
 
 
-@app.route('/delete_pc', methods=['GET', 'POST'])
+@app.route('/delete_pc', methods=['POST'])
 def delete_pc() -> str | Any:
-    if request.method == 'POST':
-        mac_addr = request.form['MAC_ADDR']
+    mac_addr = request.form['MAC_ADDR']
 
-        persistant.delete_pc_mac_addresses(mac_addr)
-    return render_template('delete_pc.html', pc_list=persistant.get_pc_mac_addresses())
+    persistant.delete_pc_mac_addresses(mac_addr)
+    return redirect('/settings')
+
+
+@app.route('/update_subnet', methods=['POST'])
+def update_subnet() -> str | Any:
+    global NETWORK_SUBNET  # pylint: disable=global-statement
+
+    valid_subnet, subnet_ip_str = is_valid_subnet(request.form['SUBNET'])
+
+    if valid_subnet:
+        persistant.set_app_settings('network_subnet', subnet_ip_str)
+        NETWORK_SUBNET = subnet_ip_str if subnet_ip_str else NETWORK_SUBNET
+        return redirect('/settings')
+    return 'invalid subnet'
+
+
+@app.route('/settings', methods=['GET'])
+def settings_page() -> str | Any:
+    device_list = scan_network_ip_addresses(NETWORK_SUBNET)
+    return render_template(
+        'settings.html', pc_list=persistant.get_pc_mac_addresses(),
+        mac_adresses=device_list, subnet=NETWORK_SUBNET,
+    )
 
 
 @app.route('/send_wol_packet', methods=['GET', 'POST'])

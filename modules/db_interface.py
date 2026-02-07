@@ -16,8 +16,9 @@ class Persistant:
         clean_starup = not os.path.exists(self.database_path)
         if clean_starup:
             print('no database found - creating ', self.database_path)
+            self._set_db_version(0)
 
-        self._migrate_db_on_version_change()
+        self._migrate_db_if_needed()
 
     def get_pc_mac_addresses(self) -> dict[str, str]:
         with sqlite3.connect(self.database_path) as database:
@@ -87,7 +88,7 @@ class Persistant:
             database.execute(sql)
             database.commit()
 
-    def _migrate_db_on_version_change(self) -> None:
+    def _migrate_db_if_needed(self) -> None:
         if self.get_db_version() == 0:
             print('migration DB from 0 to 1')
             self._execute_single_command(
