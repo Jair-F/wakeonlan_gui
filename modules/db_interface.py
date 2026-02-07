@@ -106,7 +106,7 @@ class Persistant:
             print('migration DB from 1 to 2')
             self._execute_single_command(
                 F"""INSERT OR IGNORE INTO {self._db_application_settings_table}
-                (setting_key, setting_value) VALUES ('app_version', '0.0.1');""",
+                (setting_key, setting_value) VALUES ('app_version', 'v1.1.0');""",
             )
             self._execute_single_command(
                 F"""INSERT OR IGNORE INTO {self._db_application_settings_table}
@@ -118,5 +118,9 @@ class Persistant:
             self._execute_single_command(
                 F"""INSERT OR IGNORE INTO {self._db_application_settings_table}
                 (setting_key, setting_value) VALUES ('network_subnet', '192.168.0.0/24');""",
+            )
+            self._execute_single_command(
+                F"""UPDATE {self._db_application_settings_table}
+                SET setting_value = 'v1.2.0' WHERE setting_key = 'app_version'""",
             )
             self._set_db_version(3)

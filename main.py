@@ -77,6 +77,7 @@ def send() -> Response:
 
 
 if __name__ in ('__main__', 'main'):
+    # persistant._set_db_version(0)
     subnet = persistant.get_app_settings('network_subnet')
     NETWORK_SUBNET = subnet if subnet else NETWORK_SUBNET
 
