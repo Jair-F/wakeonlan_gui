@@ -1,5 +1,7 @@
 # from getmac import get_mac_address
-from scapy.all import ARP, Ether, srp
+from scapy.all import ARP
+from scapy.all import Ether
+from scapy.all import srp
 
 # # Get MAC address of a local interface
 # mac_local = get_mac_address()
@@ -14,12 +16,13 @@ from scapy.all import ARP, Ether, srp
 # print(f"Remote Host MAC: {mac_remote_host}")
 
 
-"""
-@return list with ip and mac
-@param subnet "192.168.0.0/24"
-"""
-def scan_network_ip_addresses(subnet) -> list:
-    arp_request = Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=subnet)
+def scan_network_ip_addresses(subnet: str) -> list[dict[str, str]]:
+    """
+    @return list with ip and mac
+    @param subnet "192.168.0.0/24"
+    """
+
+    arp_request = Ether(dst='ff:ff:ff:ff:ff:ff') / ARP(pdst=subnet)
     answered, unanswered = srp(arp_request, timeout=1, verbose=False)
 
     results = []
@@ -27,12 +30,10 @@ def scan_network_ip_addresses(subnet) -> list:
         results.append({'ip': received.psrc, 'mac': received.hwsrc})
     return results
 
+
 if __name__ == '__main__':
-    subnet = "192.168.0.0/24"  # Replace with your network range
-    print("scanning network")
-    devices = scan_network_ip_addresses(subnet)
-    print(F"found {len(devices)} devices")
+    print('scanning network')
+    devices = scan_network_ip_addresses(subnet='192.168.0.0/24')
+    print(F'found {len(devices)} devices')
     for device in devices:
         print(f"IP: {device['ip']}, MAC: {device['mac']}")
-
-        
