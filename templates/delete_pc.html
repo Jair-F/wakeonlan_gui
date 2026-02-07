@@ -13,8 +13,7 @@
     {% include 'header.html' %}
 
     <form action="/delete_pc" method="POST">
-        <h1>Wake-on-LAN Utility</h1>
-        <label for="pc">Click the button below to wake up your device.</label>
+        <h1>Select a PC to delete</h1>
         <select name="MAC_ADDR" id="pc">
             {% for key, value in pc_list.items() %}
             <option value="{{ value }}">{{ key }}</option>
